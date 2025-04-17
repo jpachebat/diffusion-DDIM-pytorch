@@ -12,8 +12,8 @@ Model:
 
 ### dataset params
 Dataset:
-  # Deciding which dataset to use, must be one of {'mnist', 'cifar', 'custom'}.
-  dataset: "cifar"
+  # Deciding which dataset to use, must be one of {'mnist', 'cifar', 'custom', 'gaussian'}.
+  dataset: "gaussian"
   # If mnist and cifar datasets, whether to use the training set.
   train: True
   # Folder of data sets. When `dataset = custom`, this parameter can be a list with different folders.
