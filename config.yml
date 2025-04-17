@@ -1,14 +1,17 @@
 ### model params
 Model:
-  in_channels: 3
-  out_channels: 3
-  model_channels: 128
-  attention_resolutions: [2, ]
-  num_res_blocks: 2
-  dropout: 0.1
-  channel_mult: [1, 2, 2, 2]
-  conv_resample: True
-  num_heads: 4
+  unet:
+    in_channels: 3
+    out_channels: 3
+    model_channels: 128
+    attention_resolutions: [2, ]
+    num_res_blocks: 2
+    dropout: 0.1
+    channel_mult: [1, 2, 2, 2]
+    conv_resample: True
+    num_heads: 4
+  mlp:
+    oui: 1
 
 ### dataset params
 Dataset:
@@ -28,6 +31,11 @@ Dataset:
   mode: "RGB"
   # If custom dataset, decide what suffix to load for the image.
   suffix: ["png", "jpg"]
+
+  config_gaussian:
+    means: [[-2, 0], [2, 0]]
+    variance: 0.5
+    n_sample: 32000
 
   # parameters for torch.utils.data.DataLoader
   batch_size: 64
@@ -51,7 +59,8 @@ Callback:
   save_freq: 1
 
 ### train params
-device: "cuda:0"
+#device: "cuda:0"
+device: "cpu"
 epochs: 1000
 # Whether to continue training, True or False
 consume: False
