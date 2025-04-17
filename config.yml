@@ -54,14 +54,14 @@ Trainer:
 ### callback params
 Callback:
   # The save path for checkpoint.
-  filepath: "./checkpoint/cifar10.pth"
+  filepath: "./checkpoint/gaussian.pth"
   # Frequency of checkpoint saving.
   save_freq: 1
 
 ### train params
 #device: "cuda:0"
-device: "cpu"
-epochs: 1000
+#device: "cpu"
+epochs: 20
 # Whether to continue training, True or False
 consume: False
 # If continue training, which checkpoint to load

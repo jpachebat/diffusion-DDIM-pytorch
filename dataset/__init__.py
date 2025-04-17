@@ -4,14 +4,14 @@ from dataset.Custom import create_custom_dataset
 from dataset.gaussian import create_gaussian_dataset
 
 
-def create_dataset(dataset: str, **kwargs):
-    if dataset == "mnist":
+def create_dataset(**kwargs):
+    if kwargs['Dataset']['dataset']== "mnist":
         return create_mnist_dataset(**kwargs)
-    elif dataset == "cifar":
+    elif kwargs['Dataset']['dataset'] == "cifar":
         return create_cifar10_dataset(**kwargs)
-    elif dataset == "custom":
+    elif kwargs['Dataset']['dataset'] == "custom":
         return create_custom_dataset(**kwargs)
-    elif dataset == "gaussian":
+    elif kwargs['Dataset']['dataset'] == "gaussian":
         return create_gaussian_dataset(**kwargs)
     else:
-        raise ValueError(f"dataset except one of {'mnist', 'cifar', 'custom'}, but got {dataset}")
+        raise ValueError(f"dataset except one of {'mnist', 'cifar', 'custom'}, but got {kwargs['Dataset']['dataset']}")

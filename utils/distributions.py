@@ -83,6 +83,7 @@ class DiffusedGaussianMixture:
         selected_vars = self.vars[component_ids].view(-1, 1)  # (n_samples, 1)
         noise = torch.randn_like(selected_means) * torch.sqrt(selected_vars)  # (n_samples, d)
         return selected_means + noise
+
     def log_likelihood(self, x):
         """
         Computes the log-likelihood log p(x) of the sample under the original GMM.

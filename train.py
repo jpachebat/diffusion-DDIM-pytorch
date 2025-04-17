@@ -8,15 +8,17 @@ from utils.callbacks import ModelCheckpoint
 
 
 def train(config):
+
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    config['device'] = device
     consume = config["consume"]
     if consume:
         cp = torch.load(config["consume_path"])
         config = cp["config"]
     print(config)
 
-    device = torch.device(config["device"])
     if config['Dataset']['dataset'] == 'gaussian':
-        loader, gmm = create_dataset(**config["Dataset"])
+        loader, gmm = create_dataset(**config)
 
     else:
         loader = create_dataset(**config["Dataset"])

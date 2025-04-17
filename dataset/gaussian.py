@@ -6,21 +6,21 @@ import yaml
 
 from utils.distributions import DiffusedGaussianMixture
 
-def create_gaussian_dataset(config_gaussian, batch_size, **kwargs):
-
+def create_gaussian_dataset(Dataset, device, **kwargs):
+    config_gaussian = Dataset['config_gaussian']
     # Retrieve values
-    means = torch.tensor(config_gaussian['means'], dtype=torch.float32)
-    variances = config_gaussian['variance'] * torch.ones(means.shape[0])
+    means = torch.tensor(config_gaussian['means'], dtype=torch.float32).to(device)
+    variances = config_gaussian['variance'] * torch.ones(means.shape[0]).to(device)
     num_components = means.shape[0]  # Number of Gaussian components
-    weights = torch.full((num_components,), 1.0 / num_components, dtype=torch.float32)
+    weights = torch.full((num_components,), 1.0 / num_components, dtype=torch.float32).to(device)
     # create gmm model
     gmm = DiffusedGaussianMixture(means,
                                   variances,
                                   weights
                                   )
 
-    arr = gmm.sample(config_gaussian['n_sample'])
-    dummy_labels = torch.zeros(arr.shape[0], 1)  # or shape (len(X),) if you prefer
+    arr = gmm.sample(config_gaussian['n_sample']).to(device)
+    dummy_labels = torch.zeros(arr.shape[0], 1, device=device)  # or shape (len(X),) if you prefer
     dataset = TensorDataset(arr, dummy_labels)
 
     loader_params = dict(
@@ -29,6 +29,6 @@ def create_gaussian_dataset(config_gaussian, batch_size, **kwargs):
         pin_memory=kwargs.get("pin_memory", True),
         num_workers=kwargs.get("num_workers", 4),
     )
-    dataloader = DataLoader(dataset, batch_size=batch_size, **loader_params)
+    dataloader = DataLoader(dataset, batch_size=Dataset['batch_size'], **loader_params)
     # Return both the dataset and the gmm
     return dataloader, gmm
