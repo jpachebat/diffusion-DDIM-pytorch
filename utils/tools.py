@@ -71,6 +71,8 @@ def save_image(images: torch.Tensor, nrow: int = 8, show: bool = True, path: Opt
         im.show()
     return grid
 
+def save_gaussian(x, gmm):
+    return
 
 def save_sample_image(images: torch.Tensor, show: bool = True, path: Optional[str] = None,
                       format: Optional[str] = None, to_grayscale: bool = False, **kwargs):

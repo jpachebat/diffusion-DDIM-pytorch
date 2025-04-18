@@ -18,14 +18,14 @@ def train(config):
     print(config)
 
     if config['Dataset']['dataset'] == 'gaussian':
-        loader, gmm = create_dataset(**config)
+        loader = create_dataset(**config)
 
     else:
         loader = create_dataset(**config["Dataset"])
     start_epoch = 1
 
     if config["Dataset"]['dataset'] == "gaussian":
-        model = ScoreNetwork()
+        model = ScoreNetwork(**config['V_func'])
     else:
         model = UNet(**config["Model"]['unet']).to(device)
 

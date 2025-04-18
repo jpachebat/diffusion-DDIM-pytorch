@@ -58,6 +58,10 @@ Callback:
   # Frequency of checkpoint saving.
   save_freq: 1
 
+V_func:
+  a: 0
+  b: [0, 2]
+  c: 0
 ### train params
 #device: "cuda:0"
 #device: "cpu"
@@ -69,3 +73,4 @@ consume_path: "./checkpoint/gaussian.pth"
 
 ### optimizer params
 lr: 0.0002
+

@@ -16,8 +16,7 @@ def create_gaussian_dataset(Dataset, device, **kwargs):
     # create gmm model
     gmm = DiffusedGaussianMixture(means,
                                   variances,
-                                  weights
-                                  )
+                                  weights)
 
     arr = gmm.sample(config_gaussian['n_sample']).to(device)
     dummy_labels = torch.zeros(arr.shape[0], 1, device=device)  # or shape (len(X),) if you prefer
@@ -31,4 +30,4 @@ def create_gaussian_dataset(Dataset, device, **kwargs):
     )
     dataloader = DataLoader(dataset, batch_size=Dataset['batch_size'], **loader_params)
     # Return both the dataset and the gmm
-    return dataloader, gmm
+    return dataloader

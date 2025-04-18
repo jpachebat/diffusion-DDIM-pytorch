@@ -1,8 +1,10 @@
 from utils.engine import DDPMSampler, DDIMSampler
 from model.UNet import UNet
 import torch
-from utils.tools import save_sample_image, save_image
+from utils.tools import save_sample_image, save_image, save_gaussian
 from argparse import ArgumentParser
+
+from model.mlp import ScoreNetwork
 
 
 def parse_option():
@@ -28,6 +30,9 @@ def parse_option():
     parser.add_argument("--show", default=False, action="store_true")
     parser.add_argument("-sp", "--image_save_path", type=str, default=None)
     parser.add_argument("--to_grayscale", default=False, action="store_true")
+
+    # synthetic data argument
+    parser.add_argument("--is_gaussian", default=False, action="store_true")
 
     args = parser.parse_args()
     return args
@@ -63,7 +68,34 @@ def generate(args):
     else:
         save_sample_image(x, show=args.show, path=args.image_save_path, to_grayscale=args.to_grayscale)
 
+def generate_gaussian(args):
+    device = torch.device(args.device)
+
+    cp = torch.load(args.checkpoint_path)
+    # load trained model
+    model = ScoreNetwork()
+    model.load_state_dict(cp["model"])
+    model.to(device)
+    model = model.eval()
+
+    if args.sampler == "ddim":
+        sampler = DDIMSampler(model, **cp["config"]["Trainer"]).to(device)
+    elif args.sampler == "ddpm":
+        sampler = DDPMSampler(model, **cp["config"]["Trainer"]).to(device)
+    else:
+        raise ValueError(f"Unknown sampler: {args.sampler}")
+
+    # generate Gaussian noise
+    z_t = torch.randn((args.batch_size, 2), device=device)
+
+    extra_param = dict(steps=args.steps, eta=args.eta, method=args.method)
+    x = sampler(z_t, only_return_x_0=args.result_only, interval=args.interval, **extra_param)
+
+    save_gaussian(x)
 
 if __name__ == "__main__":
     args = parse_option()
-    generate(args)
+    if args.is_gaussian:
+        generate_gaussian(args)
+    else:
+        generate(args)

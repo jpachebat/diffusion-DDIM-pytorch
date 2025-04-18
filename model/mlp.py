@@ -27,7 +27,7 @@ class FourierEmbedding(nn.Module):
 # The score network itself
 
 class ScoreNetwork(nn.Module):
-    def __init__(self, input_dim=2, hidden_dim=64, time_embed_dim=32):
+    def __init__(self, input_dim=2, hidden_dim=64, time_embed_dim=32, a=0, b=[0, 2], c=0, **kwargs):
         super().__init__()
 #        self.time_mlp = nn.Sequential(
 #            nn.Linear(1, time_embed_dim),
@@ -47,6 +47,11 @@ class ScoreNetwork(nn.Module):
             nn.SiLU(),
             nn.Linear(hidden_dim, input_dim)
         )
+
+        self.a = torch.tensor(a, dtype=torch.float)
+        self.b = torch.tensor(b, dtype=torch.float)
+        self.c = torch.tensor(c, dtype=torch.float)
+
 
     def forward(self, x, t):
         t_embedding = self.time_mlp(t)
