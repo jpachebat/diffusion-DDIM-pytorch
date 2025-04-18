@@ -65,7 +65,7 @@ epochs: 20
 # Whether to continue training, True or False
 consume: False
 # If continue training, which checkpoint to load
-consume_path: "./checkpoint/cifar10.pth"
+consume_path: "./checkpoint/gaussian.pth"
 
 ### optimizer params
 lr: 0.0002
